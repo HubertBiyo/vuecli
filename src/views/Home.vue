@@ -11,7 +11,7 @@
      </el-col>
      <el-col :span="4" class="userinfo">
        <el-dropdown trigger="hover">
-					<span class="el-dropdown-link userinfo-inner"><img :src="this.sysUserAvatar" /> {{sysUserName}}</span>
+					<span class="el-dropdown-link userinfo-inner"><img src="../common/images/boy-3.png" /> {{sysUserName}}</span>
 					<el-dropdown-menu slot="dropdown">
 						<el-dropdown-item>我的消息</el-dropdown-item>
 						<el-dropdown-item>设置</el-dropdown-item>
@@ -69,16 +69,15 @@
 			</section>
    </el-col>
  </el-row>
-</template>
-
+ </template>
 <script>
 export default {
   data() {
     return {
       sysName: "Hubert",
       collapsed: false,
-      sysUserName: "",
-      sysUserAvatar: "/src/assets/logo.png"
+      sysUserName: "Hubert",
+      sysUserAvatar: "../common/images/boy-3.png"
     };
   },
   methods: {
