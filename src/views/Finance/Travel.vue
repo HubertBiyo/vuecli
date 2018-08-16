@@ -3,12 +3,6 @@
   <!--工具条-->
 		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
 			<el-form :inline="true" :model="condition">
-				<el-form-item>
-					<el-input v-model="condition.name" placeholder="姓名"></el-input>
-				</el-form-item>
-				<el-form-item>
-					<el-button type="primary" v-on:click="getUser">查询</el-button>
-				</el-form-item>
         <el-form-item>
 					<el-button type="primary" size="medium" v-on:click="addTrain">新增</el-button>
 				</el-form-item>
@@ -158,6 +152,9 @@
 </section>
 </template>
 <script>
+import axios from "axios";
+import moment from "moment";
+
 export default {
   data() {
     return {
@@ -261,7 +258,15 @@ export default {
     };
   },
   methods: {
-    getUser: function() {},
+    gettrain: function() {
+      var _this=this;
+      axios
+        .get("http://api.xinyo.xin/api/Travel/GetAllTravel")
+        .then(function(res) {
+          console.log(res);
+          _this.trainList=res.data;
+        });
+    },
     addTrain: function() {
       this.dialogFormVisible = true;
       this.addtype = "add";
@@ -416,6 +421,10 @@ export default {
         });
     }
   },
+  created() {
+    this.gettrain();
+  },
+  mounted() {},
   filters: {}
 };
 </script>
