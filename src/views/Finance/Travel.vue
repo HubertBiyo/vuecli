@@ -31,6 +31,21 @@
                         </template>
                     </el-table-column>
      </el-table>
+     <div>
+      <!-- 分页控件 layout中的jumper布局有问题，这里没用-->
+      <el-pagination
+        class="pageView"
+        v-if="paginationShow"
+        background
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page.sync="pageNo"
+        :page-size="15"
+        layout="total, prev, pager, next"
+        :pager-count="11"
+        :total="totalCount">
+      </el-pagination>
+    </div>
 		</template>
     <!--弹窗-->
     <el-dialog :title="titleMap[dialogStatus]" :visible.sync="dialogFormVisible">
@@ -163,6 +178,7 @@ export default {
         pagesize: 10,
         name
       },
+      paginationShow:true,
       add: {
         OrderNo: "",
         DepartureTime: "",
@@ -402,7 +418,8 @@ export default {
               if (res.data.Code == 0) {
                 _this.$message({
                   type: "success",
-                  message: res.data.Message
+                  message: res.data.Message,
+                  center:true,
                 });
                 console.log(res);
                 _this.gettrain();
