@@ -1,170 +1,166 @@
 <template>
-<section>
-  <!--工具条-->
-		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
-			<el-form :inline="true" :model="condition">
-        <el-form-item>
-					<el-button type="primary" size="medium" v-on:click="addTrain">新增</el-button>
-				</el-form-item>
-			</el-form>
-		</el-col>
-    <!--列表-->
-		<template>
-    <el-table :data="trainList" border v-loading="Loadtrain" element-loading-text="拼命加载中">
-                    <el-table-column type="index" width="50"></el-table-column>
-                    <el-table-column prop="OrderNo" label="订单编号" width="">
-                    </el-table-column>
-                    <el-table-column prop="DepartureTime" :formatter="dateFormat" label="出发日期" width="">
-                    </el-table-column>
-                    <el-table-column prop="Origin_Time" label="始发地" width="">
-                    </el-table-column>
-                    <el-table-column prop="Destination_Time" label="目的地" width="">
-                    </el-table-column>
-                    <el-table-column prop="TrainNumber" label="车次" width="">
-                    </el-table-column>
-                    <el-table-column prop="TicketMoney" label="火车票金额" width="">
-                    </el-table-column>
-                    <el-table-column fixed="right" label="操作" width="160">
-                        <template slot-scope="scope">
-                            <el-button type="primary" v-on:click="handelEdit(scope.row)" size="small" plain>编辑</el-button>
-                            <el-button type="primary" v-on:click="showdelete(scope.row.Id)" size="small" plain>删除</el-button>
-                        </template>
-                    </el-table-column>
-     </el-table>
-     <div>
-      <!-- 分页控件 layout中的jumper布局有问题，这里没用-->
-      <el-pagination
-        class="pageView"
-        v-if="paginationShow"
-        background
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page.sync="pageNo"
-        :page-size="15"
-        layout="total, prev, pager, next"
-        :pager-count="11"
-        :total="totalCount">
-      </el-pagination>
-    </div>
-		</template>
-    <!--弹窗-->
-    <el-dialog :title="titleMap[dialogStatus]" :visible.sync="dialogFormVisible">
-        <el-form :model="add" label-width="80px" :rules="rules" ref="add">
-            <el-row>
-                <el-col :span="12">
-                    <el-form-item label="订单号" prop="OrderNo">
-                        <el-input v-model="add.OrderNo" auto-complete="off"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="姓名" prop="TName">
-                        <el-input v-model="add.TName" auto-complete="off"></el-input>
-                    </el-form-item>
-                </el-col>
+    <section>
+        <!--工具条-->
+        <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
+            <el-form :inline="true" :model="condition">
+                <el-form-item>
+                    <el-button type="primary" size="medium" v-on:click="addTrain">新增</el-button>
+                </el-form-item>
+            </el-form>
+        </el-col>
+        <!--列表-->
+        <template>
+            <el-table :data="trainList" border v-loading="Loadtrain" element-loading-text="拼命加载中">
+                <el-table-column type="index" width="50"></el-table-column>
+                <el-table-column prop="OrderNo" label="订单编号" width="">
+                </el-table-column>
+                <el-table-column prop="DepartureTime" :formatter="dateFormat" label="出发日期" width="">
+                </el-table-column>
+                <el-table-column prop="Origin_Time" label="始发地" width="">
+                </el-table-column>
+                <el-table-column prop="Destination_Time" label="目的地" width="">
+                </el-table-column>
+                <el-table-column prop="TrainNumber" label="车次" width="">
+                </el-table-column>
+                <el-table-column prop="TicketMoney" label="火车票金额" width="">
+                </el-table-column>
+                <el-table-column fixed="right" label="操作" width="160">
+                    <template slot-scope="scope">
+                        <el-button type="primary" v-on:click="handelEdit(scope.row)" size="small" plain>编辑</el-button>
+                        <el-button type="primary" v-on:click="showdelete(scope.row.Id)" size="small" plain>删除</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <!--分页-->
+           <div class="Pagination" style="text-align: left;margin-top: 10px;">
+                <el-pagination
+                  @size-change="handleSizeChange"
+                  @current-change="handleCurrentChange"
+                  :current-page="currentPage"
+                  :page-size="condition.PageSize"
+                  layout="total, prev, pager, next"
+                  :total="total">
+                </el-pagination>
+            </div>
+        </template>
+        <!--弹窗-->
+        <el-dialog :title="titleMap[dialogStatus]" :visible.sync="dialogFormVisible">
+            <el-form :model="add" label-width="80px" :rules="rules" ref="add">
+                <el-row>
+                    <el-col :span="12">
+                        <el-form-item label="订单号" prop="OrderNo">
+                            <el-input v-model="add.OrderNo" auto-complete="off"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="姓名" prop="TName">
+                            <el-input v-model="add.TName" auto-complete="off"></el-input>
+                        </el-form-item>
+                    </el-col>
 
-            </el-row>
-            <el-row>
-                <el-col :span="12">
-                    <el-form-item label="始发地" prop="Origin_Time">
-                        <el-input v-model="add.Origin_Time" auto-complete="off"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="目的地" prop="Destination_Time">
-                        <el-input v-model="add.Destination_Time" auto-complete="off"></el-input>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-            <el-row>
-                <el-col :span="12">
-                    <el-form-item label="车次" prop="TrainNumber">
-                        <el-input v-model="add.TrainNumber" auto-complete="off"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="具体位置" prop="Carriage">
-                        <el-col :span="12">
-                            <el-input v-model="add.Carriage" auto-complete="off">
-                                <template slot="append">
-                                    车
-                                </template>
-                            </el-input>
-                        </el-col>
-                        <el-col :span="12">
-                            <el-input v-model="add.SeatNumber" auto-complete="off">
-                                <template slot="append">
-                                    号
-                                </template>
-                            </el-input>
-                        </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="12">
+                        <el-form-item label="始发地" prop="Origin_Time">
+                            <el-input v-model="add.Origin_Time" auto-complete="off"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="目的地" prop="Destination_Time">
+                            <el-input v-model="add.Destination_Time" auto-complete="off"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="12">
+                        <el-form-item label="车次" prop="TrainNumber">
+                            <el-input v-model="add.TrainNumber" auto-complete="off"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="具体位置" prop="Carriage">
+                            <el-col :span="12">
+                                <el-input v-model="add.Carriage" auto-complete="off">
+                                    <template slot="append">
+                                        车
+                                    </template>
+                                </el-input>
+                            </el-col>
+                            <el-col :span="12">
+                                <el-input v-model="add.SeatNumber" auto-complete="off">
+                                    <template slot="append">
+                                        号
+                                    </template>
+                                </el-input>
+                            </el-col>
 
-                    </el-form-item>
-                </el-col>
+                        </el-form-item>
+                    </el-col>
 
-            </el-row>
+                </el-row>
 
-            <el-row>
-                <el-col :span="12">
-                    <el-form-item label="座位类型" prop="SeatType">
-                        <el-select v-model="add.SeatType" placeholder="请选择">
-                            <el-option v-for="item in SeatTypeOptions"
-                                       :key="item.value"
-                                       :label="item.label"
-                                       :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="车票类型" prop="TicketType">
-                        <el-select v-model="add.TicketType" placeholder="请选择">
-                            <el-option v-for="item in TicketTypeOptions"
-                                       :key="item.value"
-                                       :label="item.label"
-                                       :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-            <el-row>
+                <el-row>
+                    <el-col :span="12">
+                        <el-form-item label="座位类型" prop="SeatType">
+                            <el-select v-model="add.SeatType" placeholder="请选择">
+                                <el-option v-for="item in SeatTypeOptions"
+                                           :key="item.value"
+                                           :label="item.label"
+                                           :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="车票类型" prop="TicketType">
+                            <el-select v-model="add.TicketType" placeholder="请选择">
+                                <el-option v-for="item in TicketTypeOptions"
+                                           :key="item.value"
+                                           :label="item.label"
+                                           :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
 
-                <el-col :span="12">
-                    <el-form-item label="出行日期" prop="DepartureTime">
-                        <div>
-                            <el-date-picker v-model="add.DepartureTime" v-on:change="getTimeDepartureTime" value-format="yyyy-MM-dd" type="date" placeholder="选择日期">
-                            </el-date-picker>
-                        </div>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="订单日期" prop="OrderTime">
-                        <div>
-                            <el-date-picker v-model="add.OrderTime" v-on:change="getTimeOrderTime" value-format="yyyy-MM-dd" type="date" placeholder="选择日期">
-                            </el-date-picker>
-                        </div>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-            <el-row>
-                <el-col :span="12">
-                    <el-form-item label="车票金额" prop="TicketMoney">
-                        <el-input type="" v-model="add.TicketMoney" auto-complete="off"></el-input>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-            <el-form-item label="备注" prop="Remark">
-                <el-input type="textarea" :rows="2" v-model="add.Remark" auto-complete="off"></el-input>
-            </el-form-item>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-            <el-row>
-                <el-button v-on:click="dialogFormVisible=false">取消</el-button>
-                <el-button type="primary" size="small" v-on:click="saveTrain('add')">确定</el-button>
-            </el-row>
-        </div>
-    </el-dialog>
-</section>
+                    <el-col :span="12">
+                        <el-form-item label="出行日期" prop="DepartureTime">
+                            <div>
+                                <el-date-picker v-model="add.DepartureTime" v-on:change="getTimeDepartureTime" value-format="yyyy-MM-dd" type="date" placeholder="选择日期">
+                                </el-date-picker>
+                            </div>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="订单日期" prop="OrderTime">
+                            <div>
+                                <el-date-picker v-model="add.OrderTime" v-on:change="getTimeOrderTime" value-format="yyyy-MM-dd" type="date" placeholder="选择日期">
+                                </el-date-picker>
+                            </div>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="12">
+                        <el-form-item label="车票金额" prop="TicketMoney">
+                            <el-input type="" v-model="add.TicketMoney" auto-complete="off"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-form-item label="备注" prop="Remark">
+                    <el-input type="textarea" :rows="2" v-model="add.Remark" auto-complete="off"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-row>
+                    <el-button v-on:click="dialogFormVisible=false">取消</el-button>
+                    <el-button type="primary" size="small" v-on:click="saveTrain('add')">确定</el-button>
+                </el-row>
+            </div>
+        </el-dialog>
+    </section>
 </template>
 <script>
 import axios from "axios";
@@ -173,12 +169,6 @@ import moment from "moment";
 export default {
   data() {
     return {
-      condition: {
-        pageindex: 1,
-        pagesize: 10,
-        name
-      },
-      paginationShow:true,
       add: {
         OrderNo: "",
         DepartureTime: "",
@@ -270,18 +260,41 @@ export default {
           label: "特快"
         }
       ],
-      value: ""
+      value: "",
+      currentRow: null,
+      total: 0,
+      currentPage: 1,
+      condition: {
+        PageIndex: 1,
+        PageSize: 5,
+        Search: ""
+      }
     };
   },
+  created() {
+    this.gettrain();
+  },
   methods: {
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`);
+    },
+    handleCurrentChange(val) {
+      this.currentPage = val;
+      this.condition.PageIndex = val;
+      console.log(this.condition.PageIndex);
+      this.gettrain();
+    },
     gettrain: function() {
       var _this = this;
       axios
-        .get("http://api.xinyo.xin/api/TrainInformation/SearchList")
+        .get("http://api.xinyo.xin/api/TrainInformation/SearchList", {
+          params: _this.condition
+        })
         .then(function(res) {
           console.log(res);
           if (res.data.Code == 0) {
             _this.trainList = res.data.Data;
+            _this.total = res.data.Total;
           }
         });
     },
@@ -419,7 +432,7 @@ export default {
                 _this.$message({
                   type: "success",
                   message: res.data.Message,
-                  center:true,
+                  center: true
                 });
                 console.log(res);
                 _this.gettrain();
@@ -439,9 +452,6 @@ export default {
             });
         });
     }
-  },
-  created() {
-    this.gettrain();
   },
   mounted() {},
   filters: {}
