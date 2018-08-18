@@ -259,12 +259,14 @@ export default {
   },
   methods: {
     gettrain: function() {
-      var _this=this;
+      var _this = this;
       axios
-        .get("http://api.xinyo.xin/api/Travel/GetAllTravel")
+        .get("http://api.xinyo.xin/api/TrainInformation/SearchList")
         .then(function(res) {
           console.log(res);
-          _this.trainList=res.data;
+          if (res.data.Code == 0) {
+            _this.trainList = res.data.Data;
+          }
         });
     },
     addTrain: function() {
@@ -337,9 +339,9 @@ export default {
       var _this = this;
       this.$refs[formName].validate(valid => {
         if (valid) {
-          var url = "/account/AddTrain";
+          var url = "http://api.xinyo.xin/api/TrainInformation/AddTrain";
           if (_this.addtype == "edit") {
-            url = "/account/EditTrain";
+            url = "http://api.xinyo.xin/api/TrainInformation/EditTrain";
           }
           _this.add.DepartureTime = moment(_this.add.DepartureTime).format(
             "YYYY-MM-DD"
@@ -347,36 +349,34 @@ export default {
           _this.add.OrderTime = moment(_this.add.OrderTime).format(
             "YYYY-MM-DD"
           );
-          $.ajax({
-            type: "post",
-            url: url,
-            data: _this.add,
-            dataType: "json",
-            success: function(res) {
-              if (res.Code == 0) {
-                vm.$data.dialogFormVisible = false;
+          axios
+            .post(url, _this.add)
+            .then(function(res) {
+              console.log(res);
+              if (res.data.Code == 0) {
+                _this.dialogFormVisible = false;
                 _this.$message({
-                  message: res.Message,
+                  message: res.data.Message,
                   type: "success",
                   center: true
                 });
-                vm.loaddata();
+                _this.gettrain();
               } else {
                 _this.$message({
-                  message: res.Message,
+                  message: res.data.Message,
                   type: "error",
                   center: true
                 });
               }
-            },
-            error: function(d) {
+            })
+            .catch(function(error) {
+              console.log(error);
               _this.$message({
                 message: "服务器异常",
                 type: "error",
                 center: true
               });
-            }
-          });
+            });
         } else {
           return false;
         }
@@ -392,32 +392,34 @@ export default {
           type: "warning"
         })
         .then(function() {
-          $.ajax({
-            type: "post",
-            url: "/account/DeleteTrain",
-            data: { id: id },
-            dataType: "Json",
-            success: function(res) {
-              if (res.Code == 0) {
+          axios
+            .delete("http://api.xinyo.xin/api/TrainInformation/DeleteTrain", {
+              params: {
+                Id: id
+              }
+            })
+            .then(function(res) {
+              if (res.data.Code == 0) {
                 _this.$message({
                   type: "success",
-                  message: res.Message
+                  message: res.data.Message
                 });
-                vm.loaddata();
+                console.log(res);
+                _this.gettrain();
               } else {
                 _this.$message({
                   type: "success",
-                  message: res.Message
+                  message: res.data.Message
                 });
               }
-            },
-            error: function(d) {
+            })
+            .catch(function(error) {
+              console.log(error);
               _this.$message({
                 type: "success",
                 message: "服务器异常"
               });
-            }
-          });
+            });
         });
     }
   },
