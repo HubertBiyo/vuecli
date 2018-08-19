@@ -4,7 +4,7 @@
      <el-form class="inner" :model="ruleForm" :rules="rules" ref="ruleForm">
          <div class="login-box">
                 <div class="auth-logo">
-                    <img class="auth-img" src="../common/images/logo.png" alt="LeetCode">
+                    <img class="auth-img" src="../common/images/hubert.jpg" alt="LeetCode">
                     <div class="login-text-logo login-group">登录 BiyoPMS</div>
                     <el-form-item prop="account" class="login-group">
                         <el-input type="text" placeholder="请输入账户名" v-model="ruleForm.account" auto-complete="off"></el-input>

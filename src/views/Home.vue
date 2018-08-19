@@ -134,7 +134,7 @@ img {
   height: 40px;
   border-radius: 20px;
   margin: 10px 0px 10px 10px;
-  float: right;
+  /* float: right; */
 }
 .logo {
   width: 230px;
