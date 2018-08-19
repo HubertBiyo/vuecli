@@ -81,6 +81,13 @@ export default {
     };
   },
   methods: {
+    logout: function() {
+      var _this=this;
+      _this.$confirm('您确定退出吗','提示',{
+      }).then(()=>{
+        _this.$router.push('/');
+      })
+    },
     handleopen() {
       //console.log('handleopen');
     },

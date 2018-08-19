@@ -1,6 +1,8 @@
 import axios from 'axios'
 
 
-let base = 'http://api.xinyo.xin/api/Travel';
+let base = 'http://api.xinyo.xin/api';
 
-export const GetAllTravel = params => { return axios.post(`${base}/GetAllTravel`, params).then(res => res); }
+export const gettrainlist = params => {
+    return axios.get(`${base}/TrainInformation/SearchList`, params).then(res => res);
+}

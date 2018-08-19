@@ -6,45 +6,44 @@ import Wage from './views/Finance/Wage.vue'
 import DailyConsumption from './views/Finance/DailyConsumption.vue'
 import Travel from './views/Finance/Travel.vue'
 import Investment from './views/Finance/Investment.vue'
-import Login from './views/404.vue'
+import Login from './views/Login.vue'
 
 Vue.use(Router)
 
 export default new Router({
     routes: [{
+            path: '/',
+            component: Login,
+            hidden: true
+        },
+        {
             path: '/404.vue',
             name: '404',
             component: NotFound,
             hidden: true
         },
         {
-            path: '/login',
-            component: Login,
-            name: '',
-            hidden: true
-        },
-        {
-            path: '/',
+            path: '/home',
             component: Home,
             name: '资金管理',
             // iconCls: 'el-icon-message', //图标样式class
             children: [{
                     path: '/DailyConsumption',
-                    name: '每日消费',
+                    name: 'Me----消费',
                     component: DailyConsumption,
                 }, {
                     path: '/travel',
                     component: Travel,
-                    name: '旅行'
+                    name: 'Me----火车票'
                 },
                 {
                     path: '/wage',
-                    name: '工资',
+                    name: 'Me----工资',
                     component: Wage,
                 }, {
                     path: '/investment',
                     component: Investment,
-                    name: '投资'
+                    name: 'Me----投资'
                 },
             ],
         },

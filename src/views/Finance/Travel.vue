@@ -165,7 +165,6 @@
 <script>
 import axios from "axios";
 import moment from "moment";
-
 export default {
   data() {
     return {
@@ -286,6 +285,7 @@ export default {
     },
     gettrain: function() {
       var _this = this;
+      _this.Loadtrain = true;
       axios
         .get("http://api.xinyo.xin/api/TrainInformation/SearchList", {
           params: _this.condition
@@ -295,6 +295,7 @@ export default {
           if (res.data.Code == 0) {
             _this.trainList = res.data.Data;
             _this.total = res.data.Total;
+            _this.Loadtrain = false;
           }
         });
     },

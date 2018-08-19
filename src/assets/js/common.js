@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import axios from 'axios'
+import router from '../../router';
 
 axios.defaults.baseURL = 'www.baidu.com'
     // 添加请求拦截器
@@ -17,5 +18,7 @@ axios.interceptors.response.use(function(response) {
 });
 
 Vue.prototype.$axios = axios
+
+Vue.prototype.$router = router;
 
 export default ({})

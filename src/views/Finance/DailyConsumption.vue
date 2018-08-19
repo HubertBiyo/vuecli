@@ -3,22 +3,24 @@
         <!--工具条-->
         <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
             <el-form :inline="true" :model="condition">
-                <el-form-item label="">
+                <el-form-item>
                     <el-button type="primary" size="medium" v-on:click="addCapial">新增</el-button>
                 </el-form-item>
             </el-form>
         </el-col>
         <!--列表-->
         <template>
-            <el-table :data="capitalList" max-height="450" border v-loading="LoadCapital" element-loading-text="拼命加载中">
+            <el-table :data="capitalList" border v-loading="LoadCapital" element-loading-text="拼命加载中">
                 <el-table-column type="index" width="50"></el-table-column>
-                <el-table-column prop="Code" label="编号" width="220">
-                </el-table-column>
+                <!-- <el-table-column prop="Code" label="编号" width="220"> 
+                </el-table-column> -->
                 <el-table-column prop="Category" :formatter="CategoryFormat" label="分类">
                 </el-table-column>
                 <el-table-column prop="Consumer" label="消费者" width="160">
                 </el-table-column>
                 <el-table-column prop="OutMoney" label="消费金额">
+                </el-table-column>
+                 <el-table-column prop="Remark" label="备注">
                 </el-table-column>
                 <el-table-column prop="AccountType" :formatter="AccountTypeFormat" label="账户">
                 </el-table-column>
@@ -113,10 +115,6 @@ import moment from "moment";
 export default {
   data() {
     return {
-      condition: {
-        pageindex: 1,
-        pagesize: 10
-      },
       capitalList: [],
       LoadCapital: false,
       dialogFormVisible: false,
@@ -204,6 +202,7 @@ export default {
     },
     getDailyConsumption: function() {
       var _this = this;
+      _this.LoadCapital=true;
       axios
         .get("http://api.xinyo.xin/api/CapitalFlow/SearchList", {
           params: _this.condition
@@ -213,6 +212,7 @@ export default {
           if (res.data.Code == 0) {
             _this.capitalList = res.data.Data;
             _this.total = res.data.Total;
+            _this.LoadCapital=false;
           }
         });
     },
