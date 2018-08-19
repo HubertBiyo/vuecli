@@ -163,7 +163,7 @@
     </section>
 </template>
 <script>
-import axios from "axios";
+
 import moment from "moment";
 import {
   gettrainlist,
@@ -295,6 +295,7 @@ export default {
       var _this = this;
       _this.Loadtrain = true;
       let para = _this.condition;
+      
       gettrainlist(para).then(res => {
         if (res.data.Code == 0) {
           _this.trainList = res.data.Data;

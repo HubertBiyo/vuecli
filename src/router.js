@@ -29,21 +29,21 @@ export default new Router({
             // iconCls: 'el-icon-message', //图标样式class
             children: [{
                     path: '/DailyConsumption',
-                    name: 'Me----消费',
+                    name: '日常消费',
                     component: DailyConsumption,
                 }, {
                     path: '/travel',
                     component: Travel,
-                    name: 'Me----火车票'
+                    name: '火车票'
                 },
                 {
                     path: '/wage',
-                    name: 'Me----工资',
+                    name: '工资',
                     component: Wage,
                 }, {
                     path: '/investment',
                     component: Investment,
-                    name: 'Me----投资'
+                    name: '投资'
                 },
             ],
         },

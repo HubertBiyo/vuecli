@@ -10,7 +10,7 @@
         </el-col>
         <!--列表-->
         <template>
-            <el-table :data="capitalList" border v-loading="LoadCapital" element-loading-text="拼命加载中">
+            <el-table :data="capitalList"  border v-loading="LoadCapital" element-loading-text="拼命加载中">
                 <el-table-column type="index" width="50"></el-table-column>
                 <!-- <el-table-column prop="Code" label="编号" width="220"> 
                 </el-table-column> -->
@@ -109,7 +109,6 @@
     </section>
 </template>
 <script>
-import axios from "axios";
 import moment from "moment";
 import {
   getDailyConsumptionlist,

@@ -25,8 +25,7 @@
 </div>
 </template>
 <script>
-import axios from "axios";
-import router from "vue-router";
+import { Login } from "../api/api.js";
 export default {
   data() {
     return {
@@ -53,14 +52,12 @@ export default {
           var accountValue = _this.ruleForm.account;
           var passwordValue = _this.ruleForm.password;
           console.log(accountValue + passwordValue);
-          axios
-            .get("http://api.xinyo.xin/api/Common/Login", {
-              params: {
-                account: accountValue,
-                password: passwordValue
-              }
-            })
-            .then(function(res) {
+          let para = {
+            account: accountValue,
+            password: passwordValue
+          };
+          Login(para)
+            .then(res => {
               if (res.data.Code == "0") {
                 _this.$router.push("home");
               } else {
