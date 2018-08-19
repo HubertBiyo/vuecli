@@ -165,6 +165,12 @@
 <script>
 import axios from "axios";
 import moment from "moment";
+import {
+  gettrainlist,
+  addTrain,
+  editTrain,
+  deleteTrain
+} from "../../api/api.js";
 export default {
   data() {
     return {
@@ -274,6 +280,7 @@ export default {
     this.gettrain();
   },
   methods: {
+    /**分页**/
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
     },
@@ -283,41 +290,18 @@ export default {
       console.log(this.condition.PageIndex);
       this.gettrain();
     },
+    /**列表**/
     gettrain: function() {
       var _this = this;
       _this.Loadtrain = true;
-      axios
-        .get("http://api.xinyo.xin/api/TrainInformation/SearchList", {
-          params: _this.condition
-        })
-        .then(function(res) {
-          console.log(res);
-          if (res.data.Code == 0) {
-            _this.trainList = res.data.Data;
-            _this.total = res.data.Total;
-            _this.Loadtrain = false;
-          }
-        });
-    },
-    addTrain: function() {
-      this.dialogFormVisible = true;
-      this.addtype = "add";
-      this.dialogStatus = "addTrain";
-      this.add = {
-        OrderNo: "",
-        DepartureTime: "",
-        Origin_Time: "",
-        Destination_Time: "",
-        TrainNumber: "",
-        SeatType: "",
-        Carriage: "",
-        SeatNumber: "",
-        TName: "",
-        TicketType: "",
-        TicketMoney: "",
-        Remark: "",
-        CreateTime: ""
-      };
+      let para = _this.condition;
+      gettrainlist(para).then(res => {
+        if (res.data.Code == 0) {
+          _this.trainList = res.data.Data;
+          _this.total = res.data.Total;
+          _this.Loadtrain = false;
+        }
+      });
     },
     /*日期格式*/
     dateFormat: function(row, column) {
@@ -327,6 +311,7 @@ export default {
       }
       return moment(date).format("YYYY-MM-DD");
     },
+    /**新增**/
     addTrain: function() {
       this.dialogFormVisible = true;
       this.addtype = "add";
@@ -353,6 +338,7 @@ export default {
     getTimeOrderTime: function(val) {
       this.add.OrderTime = new Date(moment(val).format("YYYY-MM-DD"));
     },
+    /**编辑**/
     handelEdit: function(item) {
       this.dialogFormVisible = true;
       this.addtype = "edit";
@@ -365,54 +351,79 @@ export default {
         moment(this.add.OrderTime).format("YYYY-MM-DD")
       );
     },
+    /**保存**/
     saveTrain: function(formName) {
       var _this = this;
       this.$refs[formName].validate(valid => {
         if (valid) {
-          var url = "http://api.xinyo.xin/api/TrainInformation/AddTrain";
-          if (_this.addtype == "edit") {
-            url = "http://api.xinyo.xin/api/TrainInformation/EditTrain";
-          }
           _this.add.DepartureTime = moment(_this.add.DepartureTime).format(
             "YYYY-MM-DD"
           );
           _this.add.OrderTime = moment(_this.add.OrderTime).format(
             "YYYY-MM-DD"
           );
-          axios
-            .post(url, _this.add)
-            .then(function(res) {
-              console.log(res);
-              if (res.data.Code == 0) {
-                _this.dialogFormVisible = false;
+          let para = _this.add;
+          if (_this.addtype == "add") {
+            addTrain(para)
+              .then(res => {
+                if (res.data.Code == 0) {
+                  _this.dialogFormVisible = false;
+                  _this.$message({
+                    message: res.data.Message,
+                    type: "success",
+                    center: true
+                  });
+                  _this.gettrain();
+                } else {
+                  _this.$message({
+                    message: res.data.Message,
+                    type: "error",
+                    center: true
+                  });
+                }
+              })
+              .catch(function(error) {
+                console.log(error);
                 _this.$message({
-                  message: res.data.Message,
-                  type: "success",
-                  center: true
-                });
-                _this.gettrain();
-              } else {
-                _this.$message({
-                  message: res.data.Message,
+                  message: "服务器异常",
                   type: "error",
                   center: true
                 });
-              }
-            })
-            .catch(function(error) {
-              console.log(error);
-              _this.$message({
-                message: "服务器异常",
-                type: "error",
-                center: true
               });
-            });
+          } else {
+            editTrain(para)
+              .then(res => {
+                if (res.data.Code == 0) {
+                  _this.dialogFormVisible = false;
+                  _this.$message({
+                    message: res.data.Message,
+                    type: "success",
+                    center: true
+                  });
+                  _this.gettrain();
+                } else {
+                  _this.$message({
+                    message: res.data.Message,
+                    type: "error",
+                    center: true
+                  });
+                }
+              })
+              .catch(function(error) {
+                console.log(error);
+                _this.$message({
+                  message: "服务器异常",
+                  type: "error",
+                  center: true
+                });
+              });
+          }
         } else {
           return false;
         }
       });
     },
-
+    /**删除**/
     showdelete: function(id) {
       var _this = this;
       _this
@@ -422,13 +433,8 @@ export default {
           type: "warning"
         })
         .then(function() {
-          axios
-            .delete("http://api.xinyo.xin/api/TrainInformation/DeleteTrain", {
-              params: {
-                Id: id
-              }
-            })
-            .then(function(res) {
+          deleteTrain({ Id: id })
+            .then(res => {
               if (res.data.Code == 0) {
                 _this.$message({
                   type: "success",

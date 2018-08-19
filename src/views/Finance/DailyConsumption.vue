@@ -111,7 +111,12 @@
 <script>
 import axios from "axios";
 import moment from "moment";
-
+import {
+  getDailyConsumptionlist,
+  addDailyConsumption,
+  editDailyConsumption,
+  deleteDailyConsumption
+} from "../../api/api.js";
 export default {
   data() {
     return {
@@ -202,19 +207,15 @@ export default {
     },
     getDailyConsumption: function() {
       var _this = this;
-      _this.LoadCapital=true;
-      axios
-        .get("http://api.xinyo.xin/api/CapitalFlow/SearchList", {
-          params: _this.condition
-        })
-        .then(function(res) {
-          console.log(res);
-          if (res.data.Code == 0) {
-            _this.capitalList = res.data.Data;
-            _this.total = res.data.Total;
-            _this.LoadCapital=false;
-          }
-        });
+      _this.LoadCapital = true;
+      let para = _this.condition;
+      getDailyConsumptionlist(para).then(res => {
+        if (res.data.Code == 0) {
+          _this.capitalList = res.data.Data;
+          _this.total = res.data.Total;
+          _this.LoadCapital = false;
+        }
+      });
     },
     addCapial: function() {
       this.dialogFormVisible = true;
@@ -243,41 +244,64 @@ export default {
       var _this = this;
       this.$refs[formName].validate(valid => {
         if (valid) {
-          var url = "http://api.xinyo.xin/api/CapitalFlow/Add";
-          if (_this.addtype == "edit") {
-            url = "http://api.xinyo.xin/api/CapitalFlow/Edit";
-          }
           _this.add.OrderTime = moment(_this.add.OrderTime).format(
             "YYYY-MM-DD HH:mm:ss"
           );
-          axios
-            .post(url, _this.add)
-            .then(function(res) {
-              console.log(res);
-              if (res.data.Code == 0) {
-                _this.dialogFormVisible = false;
+          if (_this.addtype == "add") {
+            addDailyConsumption(_this.add)
+              .then(res => {
+                if (res.data.Code == 0) {
+                  _this.dialogFormVisible = false;
+                  _this.$message({
+                    message: res.data.Message,
+                    type: "success",
+                    center: true
+                  });
+                  _this.getDailyConsumption();
+                } else {
+                  _this.$message({
+                    message: res.data.Message,
+                    type: "error",
+                    center: true
+                  });
+                }
+              })
+              .catch(function(error) {
+                console.log(error);
                 _this.$message({
-                  message: res.data.Message,
-                  type: "success",
-                  center: true
-                });
-                _this.getDailyConsumption();
-              } else {
-                _this.$message({
-                  message: res.data.Message,
+                  message: "服务器异常",
                   type: "error",
                   center: true
                 });
-              }
-            })
-            .catch(function(error) {
-              console.log(error);
-              _this.$message({
-                message: "服务器异常",
-                type: "error",
-                center: true
               });
-            });
+          } else {
+            editDailyConsumption(_this.add)
+              .then(res => {
+                if (res.data.Code == 0) {
+                  _this.dialogFormVisible = false;
+                  _this.$message({
+                    message: res.data.Message,
+                    type: "success",
+                    center: true
+                  });
+                  _this.getDailyConsumption();
+                } else {
+                  _this.$message({
+                    message: res.data.Message,
+                    type: "error",
+                    center: true
+                  });
+                }
+              })
+              .catch(function(error) {
+                console.log(error);
+                _this.$message({
+                  message: "服务器异常",
+                  type: "error",
+                  center: true
+                });
+              });
+          }
         } else {
           return false;
         }
@@ -293,14 +317,8 @@ export default {
           type: "warning"
         })
         .then(function() {
-          axios
-            .delete("http://api.xinyo.xin/api/CapitalFlow/Delete", {
-              params: {
-                Id: id
-              }
-            })
-            .then(function(res) {
-                console.log(res);
+          deleteDailyConsumption({ Id: id })
+            .then(res => {
               if (res.data.Code == 0) {
                 _this.$message({
                   type: "success",
