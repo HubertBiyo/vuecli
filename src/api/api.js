@@ -1,10 +1,24 @@
+import axios from 'axios'
+axios.defaults.baseURL = 'www.baidu.com'
+    // 添加请求拦截器
+axios.interceptors.request.use(function(config) {
+    return config;
+}, function(error) {
+    return Promise.reject(error);
+});
 
+// 添加响应拦截器
+axios.interceptors.response.use(function(response) {
+    return response.data;
+}, function(error) {
+    return Promise.reject(error);
+});
 
 let base = 'http://api.xinyo.xin/api';
 
 /**登录接口**/
 export const Login = params => {
-    return this.$axios.get(`${base}/Common/Login`, {
+    return axios.get(`${base}/Common/Login`, {
         params: params
     }).then(res => res);
 };
@@ -12,24 +26,24 @@ export const Login = params => {
  * 火车票相关接口
  */
 export const gettrainlist = params => {
-    return this.$axios.get(`${base}/TrainInformation/SearchList`, {
+    return axios.get(`${base}/TrainInformation/SearchList`, {
         params: params
     }).then(res => res);
 };
 export const addTrain = params => {
-    return this.$axios.post(`${base}/TrainInformation/add`,
+    return axios.post(`${base}/TrainInformation/add`,
         params
     );
 };
 
 export const editTrain = params => {
-    return this.$axios.post(`${base}/TrainInformation/edit`,
+    return axios.post(`${base}/TrainInformation/edit`,
         params
     );
 };
 
 export const deleteTrain = params => {
-    return this.$axios.delete(`${base}/TrainInformation/delete`, {
+    return axios.delete(`${base}/TrainInformation/delete`, {
         params: params
     }).then(res => res);
 };
@@ -38,18 +52,18 @@ export const deleteTrain = params => {
  * 日常消费相关接口
  */
 export const getDailyConsumptionlist = params => {
-    return this.$axios.get(`${base}/CapitalFlow/SearchList`, {
+    return axios.get(`${base}/CapitalFlow/SearchList`, {
         params: params
     }).then(res => res);
 };
 export const addDailyConsumption = params => {
-    return this.$axios.post(`${base}/CapitalFlow/add`, params);
+    return axios.post(`${base}/CapitalFlow/add`, params);
 };
 export const editDailyConsumption = params => {
-    return this.$axios.post(`${base}/CapitalFlow/edit`, params);
+    return axios.post(`${base}/CapitalFlow/edit`, params);
 };
 export const deleteDailyConsumption = params => {
-    return this.$axios.delete(`${base}/CapitalFlow/delete`, {
+    return axios.delete(`${base}/CapitalFlow/delete`, {
         params: params
     }).then(res => res);
 };
