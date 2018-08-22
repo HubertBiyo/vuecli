@@ -57,11 +57,11 @@ export default {
           };
           Login(para)
             .then(res => {
-              if (res.data.Code == "0") {
+              if (res.Code == "0") {
                 _this.$router.push("home");
               } else {
                 _this.$message({
-                  message: res.data.Message,
+                  message: res.Message,
                   type: "error",
                   center: true
                 });

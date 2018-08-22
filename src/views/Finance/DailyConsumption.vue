@@ -209,9 +209,10 @@ export default {
       _this.LoadCapital = true;
       let para = _this.condition;
       getDailyConsumptionlist(para).then(res => {
-        if (res.data.Code == 0) {
-          _this.capitalList = res.data.Data;
-          _this.total = res.data.Total;
+        console.log(res);
+        if (res.Code == 0) {
+          _this.capitalList = res.Data;
+          _this.total = res.Total;
           _this.LoadCapital = false;
         }
       });
@@ -247,19 +248,20 @@ export default {
             "YYYY-MM-DD HH:mm:ss"
           );
           if (_this.addtype == "add") {
+
             addDailyConsumption(_this.add)
               .then(res => {
-                if (res.data.Code == 0) {
+                if (res.Code == 0) {
                   _this.dialogFormVisible = false;
                   _this.$message({
-                    message: res.data.Message,
+                    message: res.Message,
                     type: "success",
                     center: true
                   });
                   _this.getDailyConsumption();
                 } else {
                   _this.$message({
-                    message: res.data.Message,
+                    message: res.Message,
                     type: "error",
                     center: true
                   });
@@ -276,17 +278,17 @@ export default {
           } else {
             editDailyConsumption(_this.add)
               .then(res => {
-                if (res.data.Code == 0) {
+                if (res.Code == 0) {
                   _this.dialogFormVisible = false;
                   _this.$message({
-                    message: res.data.Message,
+                    message: res.Message,
                     type: "success",
                     center: true
                   });
                   _this.getDailyConsumption();
                 } else {
                   _this.$message({
-                    message: res.data.Message,
+                    message: res.Message,
                     type: "error",
                     center: true
                   });
@@ -318,10 +320,10 @@ export default {
         .then(function() {
           deleteDailyConsumption({ Id: id })
             .then(res => {
-              if (res.data.Code == 0) {
+              if (res.Code == 0) {
                 _this.$message({
                   type: "success",
-                  message: res.data.Message,
+                  message: res.Message,
                   center: true
                 });
                 console.log(res);
@@ -329,7 +331,7 @@ export default {
               } else {
                 _this.$message({
                   type: "success",
-                  message: res.data.Message
+                  message: res.Message
                 });
               }
             })

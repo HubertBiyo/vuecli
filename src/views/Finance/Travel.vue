@@ -297,9 +297,9 @@ export default {
       let para = _this.condition;
       
       gettrainlist(para).then(res => {
-        if (res.data.Code == 0) {
-          _this.trainList = res.data.Data;
-          _this.total = res.data.Total;
+        if (res.Code == 0) {
+          _this.trainList = res.Data;
+          _this.total = res.Total;
           _this.Loadtrain = false;
         }
       });
@@ -367,17 +367,17 @@ export default {
           if (_this.addtype == "add") {
             addTrain(para)
               .then(res => {
-                if (res.data.Code == 0) {
+                if (res.Code == 0) {
                   _this.dialogFormVisible = false;
                   _this.$message({
-                    message: res.data.Message,
+                    message: res.Message,
                     type: "success",
                     center: true
                   });
                   _this.gettrain();
                 } else {
                   _this.$message({
-                    message: res.data.Message,
+                    message: res.Message,
                     type: "error",
                     center: true
                   });
@@ -394,17 +394,17 @@ export default {
           } else {
             editTrain(para)
               .then(res => {
-                if (res.data.Code == 0) {
+                if (res.Code == 0) {
                   _this.dialogFormVisible = false;
                   _this.$message({
-                    message: res.data.Message,
+                    message: res.Message,
                     type: "success",
                     center: true
                   });
                   _this.gettrain();
                 } else {
                   _this.$message({
-                    message: res.data.Message,
+                    message: res.Message,
                     type: "error",
                     center: true
                   });
@@ -436,10 +436,10 @@ export default {
         .then(function() {
           deleteTrain({ Id: id })
             .then(res => {
-              if (res.data.Code == 0) {
+              if (res.Code == 0) {
                 _this.$message({
                   type: "success",
-                  message: res.data.Message,
+                  message: res.Message,
                   center: true
                 });
                 console.log(res);
@@ -447,7 +447,7 @@ export default {
               } else {
                 _this.$message({
                   type: "success",
-                  message: res.data.Message
+                  message: res.Message
                 });
               }
             })
