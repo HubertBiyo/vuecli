@@ -51,7 +51,6 @@ export default {
         if (valid) {
           var accountValue = _this.ruleForm.account;
           var passwordValue = _this.ruleForm.password;
-          console.log(accountValue + passwordValue);
           let para = {
             account: accountValue,
             password: passwordValue
