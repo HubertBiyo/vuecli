@@ -133,7 +133,6 @@ export default {
         OutMoney: "",
         Consumer: "豆旭波",
         Remark: "",
-        CreateTime: "",
         OrderTime: ""
       },
       rules: {
@@ -227,7 +226,6 @@ export default {
         OutMoney: "",
         Consumer: "豆旭波",
         Remark: "",
-        CreateTime: "",
         OrderTime: ""
       };
     },

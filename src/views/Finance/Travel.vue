@@ -188,7 +188,6 @@ export default {
         OrderTime: "",
         TicketMoney: "",
         Remark: "",
-        CreateTime: ""
       },
       rules: {
         OrderNo: [{ required: true, message: "请输入订单号", trigger: "blur" }],
@@ -330,7 +329,6 @@ export default {
         TicketType: "",
         TicketMoney: "",
         Remark: "",
-        CreateTime: ""
       };
     },
     getTimeDepartureTime: function(val) {
