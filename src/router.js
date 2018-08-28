@@ -7,6 +7,7 @@ import DailyConsumption from './views/Finance/DailyConsumption.vue'
 import Travel from './views/Finance/Travel.vue'
 import Investment from './views/Finance/Investment.vue'
 import Login from './views/Login.vue'
+import Account from './views/System/Account.vue'
 
 Vue.use(Router)
 
@@ -46,6 +47,17 @@ export default new Router({
                     name: '投资'
                 },
             ],
+        },
+        {
+            path: '/home',
+            component: Home,
+            name: '系统管理',
+            // iconCls: 'el-icon-message', //图标样式class
+            children: [{
+                path: '/Account',
+                name: '账户管理',
+                component: Account,
+            }],
         },
     ]
 })

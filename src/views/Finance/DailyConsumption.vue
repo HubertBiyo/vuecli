@@ -309,6 +309,7 @@ export default {
 
     showdelete: function(id) {
       var _this = this;
+      console.log(id);
       _this
         .$confirm("您确认删除此记录吗?", "提示", {
           confirmButtonText: "确定",

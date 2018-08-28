@@ -22,6 +22,31 @@ export const Login = params => {
         params: params
     }).then(res => res);
 };
+
+/**账户管理**/
+export const getuserlist = params => {
+    return axios.get(`${base}/User/GetSearchList`, {
+        params: params
+    }).then(res => res)
+};
+export const addUser = params => {
+    return axios.post(`${base}/User/add`,
+        params
+    );
+};
+
+export const editUser = params => {
+    return axios.post(`${base}/User/edit`,
+        params
+    );
+};
+
+export const deleteUser = params => {
+    return axios.delete(`${base}/User/delete`, {
+        params: params
+    }).then(res => res);
+};
+
 /**
  * 票相关接口
  */
