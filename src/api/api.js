@@ -1,19 +1,39 @@
 import axios from 'axios'
-axios.defaults.baseURL = 'www.baidu.com'
-    // 添加请求拦截器
-axios.interceptors.request.use(function(config) {
+axios.defaults.baseURL = 'www.xinyo.xin'
+// 添加请求拦截器
+import {
+    Loading,
+    Message
+} from 'element-ui'
+//超时时间
+axios.defaults.timeout = 5000
+
+var loadinginstace;
+// 添加请求拦截器
+axios.interceptors.request.use(function (config) {
+    loadinginstace = Loading.service({
+        fullscreen: true
+    })
     return config;
-}, function(error) {
+}, function (error) {
+    loadinginstace.close()
+    Message.error({
+        message: '加载超时'
+    })
     return Promise.reject(error);
 });
 
 // 添加响应拦截器
-axios.interceptors.response.use(function(response) {
+axios.interceptors.response.use(function (response) {
+    loadinginstace.close()
     return response.data;
-}, function(error) {
+}, function (error) {
+    loadinginstace.close()
+    Message.error({
+        message: '加载失败'
+    })
     return Promise.reject(error);
 });
-
 let base = 'http://api.xinyo.xin/api';
 
 /**登录接口**/
