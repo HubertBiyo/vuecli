@@ -58,6 +58,7 @@ export default {
           Login(para)
             .then(res => {
               if (res.Code == "0") {
+                sessionStorage.setItem("token", JSON.stringify(res.token));
                 _this.$router.push("home");
               } else {
                 _this.$message({

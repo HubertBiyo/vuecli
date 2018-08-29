@@ -11,53 +11,78 @@ import Account from './views/System/Account.vue'
 
 Vue.use(Router)
 
-export default new Router({
-    routes: [{
-            path: '/',
-            component: Login,
-            hidden: true
+
+const routes = [{
+        path: '/',
+        component: Login,
+        hidden: true
+    },
+    {
+        path: '/404.vue',
+        name: '404',
+        component: NotFound,
+        hidden: true
+    },
+    {
+        path: '/home',
+        component: Home,
+        meta: {
+            requiresAuth: true //添加该字段，表示进入这个路由是需要登录的
         },
-        {
-            path: '/404.vue',
-            name: '404',
-            component: NotFound,
-            hidden: true
-        },
-        {
-            path: '/home',
-            component: Home,
-            name: '资金管理',
-            // iconCls: 'el-icon-message', //图标样式class
-            children: [{
-                    path: '/DailyConsumption',
-                    name: '日常消费',
-                    component: DailyConsumption,
-                }, {
-                    path: '/travel',
-                    component: Travel,
-                    name: '火车票'
+        name: '资金管理',
+        // iconCls: 'el-icon-message', //图标样式class
+        children: [{
+                path: '/DailyConsumption',
+                name: '日常消费',
+                meta: {
+                    requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
                 },
-                {
-                    path: '/wage',
-                    name: '工资',
-                    component: Wage,
-                }, {
-                    path: '/investment',
-                    component: Investment,
-                    name: '投资'
+                component: DailyConsumption,
+            }, {
+                path: '/travel',
+                component: Travel,
+                meta: {
+                    requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
                 },
-            ],
+                name: '火车票'
+            },
+            {
+                path: '/wage',
+                name: '工资',
+                meta: {
+                    requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+                },
+                component: Wage,
+            }, {
+                path: '/investment',
+                component: Investment,
+                meta: {
+                    requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+                },
+                name: '投资'
+            },
+        ],
+    },
+    {
+        path: '/home',
+        component: Home,
+        meta: {
+            requiresAuth: true
         },
-        {
-            path: '/home',
-            component: Home,
-            name: '系统管理',
-            // iconCls: 'el-icon-message', //图标样式class
-            children: [{
-                path: '/Account',
-                name: '账户管理',
-                component: Account,
-            }],
-        },
-    ]
-})
+        name: '系统管理',
+        // iconCls: 'el-icon-message', //图标样式class
+        children: [{
+            path: '/Account',
+            name: '账户管理',
+            meta: {
+                requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            },
+            component: Account,
+        }],
+    },
+]
+
+const router = new Router({
+    routes: routes
+  })
+export default router
