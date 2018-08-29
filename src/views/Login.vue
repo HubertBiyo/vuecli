@@ -32,8 +32,8 @@ export default {
       account: "",
       password: "",
       ruleForm: {
-        account: "admin",
-        password: "123456"
+        account: "",
+        password: ""
       },
       rules: {
         account: [
@@ -82,7 +82,7 @@ export default {
 </script>
 <style>
 .login-app-base {
-  background-color: rgba(111, 156, 105, 0.5);
+  background-color: #0087C9;
 }
 
 .login-app-base {
@@ -103,7 +103,7 @@ export default {
   position: relative;
   display: inline-block;
   border-radius: 10px;
-  background: rgba(69, 167, 57, 0.5);
+  background: #E7E8E8;
 }
 
 .auth-logo {

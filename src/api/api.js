@@ -1,40 +1,21 @@
 import axios from 'axios'
-axios.defaults.baseURL = 'www.xinyo.xin'
-// 添加请求拦截器
-import {
-    Loading,
-    Message
-} from 'element-ui'
-//超时时间
 axios.defaults.timeout = 5000
 
-var loadinginstace;
+let base = 'http://api.xinyo.xin/api';
 // 添加请求拦截器
-axios.interceptors.request.use(function (config) {
-    loadinginstace = Loading.service({
-        fullscreen: true
-    })
+axios.interceptors.request.use(function(config) {
+
     return config;
-}, function (error) {
-    loadinginstace.close()
-    Message.error({
-        message: '加载超时'
-    })
+}, function(error) {
     return Promise.reject(error);
 });
 
 // 添加响应拦截器
-axios.interceptors.response.use(function (response) {
-    loadinginstace.close()
+axios.interceptors.response.use(function(response) {
     return response.data;
-}, function (error) {
-    loadinginstace.close()
-    Message.error({
-        message: '加载失败'
-    })
+}, function(error) {
     return Promise.reject(error);
 });
-let base = 'http://api.xinyo.xin/api';
 
 /**登录接口**/
 export const Login = params => {

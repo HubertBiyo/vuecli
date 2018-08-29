@@ -9,25 +9,24 @@ Vue.config.productionTip = false
 Vue.use(ElementUI)
 
 new Vue({
-  router,
-  render: h => h(App)
+    router,
+    render: h => h(App)
 }).$mount('#app')
 
 router.beforeEach((to, from, next) => {
-  let token = window.sessionStorage.getItem('token')
-
-  if (to.path == '/') {
-    sessionStorage.removeItem('token');
-  }
-  // alert(token);
-  if (to.matched.some(record => record.meta.requiresAuth) && (!token || token === null)) {
-    next({
-      path: '/',
-      query: {
-        redirect: to.fullPath
-      }
-    })
-  } else {
-    next()
-  }
+    let token = window.sessionStorage.getItem('token')
+    if (to.path == '/') {
+        sessionStorage.removeItem('token');
+    }
+    // alert(token);
+    if (to.matched.some(record => record.meta.requiresAuth) && (!token || token === null)) {
+        next({
+            path: '/',
+            query: {
+                redirect: to.fullPath
+            }
+        })
+    } else {
+        next()
+    }
 })
